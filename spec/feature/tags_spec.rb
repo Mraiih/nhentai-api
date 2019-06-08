@@ -17,11 +17,11 @@ RSpec.describe 'Basics:' do
   end
 
   it 'should show the numbers of pages' do
-    expect(book.count).to eq 32
+    expect(book.count_pages).to eq 32
   end
 
   it 'should show the numbers of favorites' do
-    expect(book.num_favorites).to eq 35
+    expect(book.count_favorites).to eq 35
   end
 
   it 'should show the upload date' do
