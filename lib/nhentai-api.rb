@@ -1,4 +1,6 @@
 require 'net/http'
+require 'time'
+require 'pp'
 
 class Tag
   attr_reader :id, :name, :count, :url
@@ -12,13 +14,13 @@ class Tag
 end
 
 class Doujinshi
-  attr_reader :id, :client, :media_id, :count_pages
+  attr_reader :id, :client, :media_id, :count
 
   def initialize(id)
     @id           = id
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
     @media_id     = @client.body.match(%r{\/([0-9]+)\/cover.jpg})[1]
-    @count_pages  = @client.body.match(/([0-9]+) pages/)[1].to_i
+    @count        = @client.body.match(/([0-9]+) pages/)[1].to_i
   end
 
   def exists?
@@ -60,7 +62,7 @@ class Doujinshi
   end
 
   def upload_date
-    Time.parse(@client.body.match(/datetime="(.+)"/)[1])
+    Time.iso8601(@client.body.match(/datetime="(.+)"/)[1])
   end
 
   def parse_tags(res)
@@ -83,7 +85,7 @@ class Doujinshi
   def count_tags
     res = @client.body.match(%r{Tags:\s*<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def tags?
@@ -99,7 +101,7 @@ class Doujinshi
   def count_parodies
     res = @client.body.match(%r{Parodies:\s+<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def parodies?
@@ -115,7 +117,7 @@ class Doujinshi
   def count_characters
     res = @client.body.match(%r{Characters:\s+<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def characters?
@@ -131,7 +133,7 @@ class Doujinshi
   def count_artists
     res = @client.body.match(%r{Artists:\s+<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def artists?
@@ -147,7 +149,7 @@ class Doujinshi
   def count_groups
     res = @client.body.match(%r{Groups:\s+<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def groups?
@@ -163,7 +165,7 @@ class Doujinshi
   def count_languages
     res = @client.body.match(%r{Languages:\s+<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def languages?
@@ -179,7 +181,7 @@ class Doujinshi
   def count_categories
     res = @client.body.match(%r{Categories:\s+<span class="tags">(.+)<\/span>})
 
-    res.nil? ? 0 : parse_tags(res[1]).count
+    res.nil? ? 0 : parse_tags(res[1]).length
   end
 
   def categories?

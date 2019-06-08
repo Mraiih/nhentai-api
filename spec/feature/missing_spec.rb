@@ -1,7 +1,7 @@
-require_relative '../../nhentai-api'
+require 'nhentai-api'
 require 'spec_helper'
 
-book = Book.new(11)
+book = Doujinshi.new(11)
 
 RSpec.describe 'Missing:' do
   it 'should not return parodies' do

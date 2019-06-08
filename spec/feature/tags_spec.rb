@@ -1,11 +1,11 @@
-require_relative '../../nhentai-api'
+require 'nhentai-api'
 require 'spec_helper'
 
-book = Book.new(10)
+book = Doujinshi.new(10)
 
 RSpec.describe 'Basics:' do
   it 'should show the id' do
-  expect(book.id).to eq 10
+    expect(book.id).to eq 10
   end
 
   it 'should show the media id' do
@@ -17,7 +17,7 @@ RSpec.describe 'Basics:' do
   end
 
   it 'should show the numbers of pages' do
-    expect(book.num_pages).to eq 32
+    expect(book.count).to eq 32
   end
 
   it 'should show the numbers of favorites' do
