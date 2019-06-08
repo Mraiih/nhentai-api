@@ -22,6 +22,9 @@ doujinshi.pages
 ...
 ```
 
+## Documentation
+You can read the documentation here: [https://www.rubydoc.info/github/groussel42/nhentai-api](https://www.rubydoc.info/github/groussel42/nhentai-api)
+
 ## TODO
 - [X] use of [YARD](https://yardoc.org/) for documentation
 - [ ] basic search
