@@ -70,33 +70,15 @@
 
 <h2 id="label-API">API</h2>
 
-<p><strong>#new</strong> <code> doujinshi = Doujinshi.new(220794) </code></p>
-
-<p><strong>#exists?</strong> <code> doujinshi.exists?           #=&gt; true </code></p>
-
-<p><strong>#title</strong> <code> doujinshi.title             #=&gt; &#39;[Illumination. (Ogadenmon)] Android no Ecchi na Yatsu | Horny Androids (NieR:Automata) [English] =TLL + mrwayne= [Digital]&#39; </code></p>
-
-<p><strong>#cover</strong> <code> doujinshi.cover             #=&gt; &#39;https://t.nhentai.net/galleries/1170172/cover.jpg&#39; </code></p>
-
-<p><strong>#page(page = 1)</strong> <code> doujinshi.get_page          #=&gt; &#39;https://i.nhentai.net/galleries/1170172/1.jpg&#39; doujinshi.get_page(10)      #=&gt; &#39;https://i.nhentai.net/galleries/1170172/10.jpg&#39; </code></p>
-
-<p><strong>#pages</strong> <code> doujinshi.pages             #=&gt; [&#39;https://i.nhentai.net/galleries/1170172/1.jpg&#39;,..., &#39;https://i.nhentai.net/galleries/1170172/31.jpg&#39;] </code></p>
-
-<p><strong>#thumbnail(page = 1)</strong> <code> doujinshi.get_thumbnail     #=&gt; &#39;https://t.nhentai.net/galleries/1170172/1t.jpg&#39; doujinshi.get_thumbnail(10) #=&gt; &#39;https://t.nhentai.net/galleries/1170172/10t.jpg&#39; </code></p>
-
-<p><strong>#thumbnails</strong> <code> doujinshi.thumbnails        #=&gt; [&#39;https://t.nhentai.net/galleries/1170172/1t.jpg&#39;,..., &#39;https://t.nhentai.net/galleries/1170172/31t.jpg&#39;] </code></p>
-
-<p><strong>#num_favorites</strong> <code> doujinshi.num_favorites     #=&gt; 13326 </code></p>
-
-<p><strong>#upload_date</strong> <code> doujinshi.upload_date       #=&gt; 2018-01-17 15:56:16 +0000 </code></p>
-
-<p><strong>#count_tags</strong><br> The method #count_parodies, #count_characters, #count_artists, #count_groups, #count_languages and #count_categories work exactly the same way <code> doujinshi.count_tags        #=&gt; 9 </code></p>
-
-<p><strong>#tags?</strong><br> The method #parodies?, #characters?, #artists?, #groups?, #languages? and #categories? work exactly the same way <code> doujinshi.tags?             #=&gt; true </code></p>
+<pre class="code ruby"><code class="ruby">doujinshi = Doujinshi.new(220794)
+doujinshi.title
+doujinshi.pages
+...
+</code></pre>
 
 <h2 id="label-TODO">TODO</h2>
 <ul><li>
-<p>[ ] better / real documentation of the API (use of YARD)</p>
+<p>[X] use of <a href="https://yardoc.org/">YARD</a> for documentation</p>
 </li><li>
 <p>[ ] basic search</p>
 </li><li>
@@ -126,7 +108,7 @@
 </div></div>
 
       <div id="footer">
-  Generated on Sat Jun  8 05:26:50 2019 by
+  Generated on Sat Jun  8 05:46:20 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.19 (ruby-2.6.3).
 </div>

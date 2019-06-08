@@ -61,7 +61,7 @@ class Doujinshi
   #
   # Give the URL of a given page of a doujinshi
   #
-  # @param [Integer] a particular page of a doujinshi
+  # @param [Integer] page a particular page of a doujinshi
   # @return [String] the URL of a given page of a doujinshi
   # @since 0.1.0
   # @example
@@ -89,7 +89,7 @@ class Doujinshi
   #
   # Give the thumbnail's URL of a given page of a doujinshi
   #
-  # @param [Integer] a particular page of a doujinshi
+  # @param [Integer] page a particular page of a doujinshi
   # @return [String] the thumbnail's URL of a given page of a doujinshi
   # @since 0.1.0
   # @example
