@@ -57,58 +57,63 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'>
-<h1 id="label-nhentai-api">nhentai-api</h1>
+      <div id="content"><div id='filecontents'><p><a href="https://badge.fury.io/rb/nhentai-api"><img src="https://badge.fury.io/rb/nhentai-api.png" alt="Gem Version" /></a>
+<img src="https://ruby-gem-downloads-badge.herokuapp.com/nhentai-api?type=total&amp;color=red&amp;style=flat" alt="" />
+<a href="https://lbesson.mit-license.org/"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT license" /></a></p>
+
+<h1 id="nhentai-api">nhentai-api</h1>
 
 <p>nhentai-api is a basic and easy to use API for <a href="https://nhentai.net">nhentai.net</a></p>
 
-<h2 id="label-Installation">Installation</h2>
+<h2 id="installation">Installation</h2>
 
-<p>Gem install <code> gem install nhentai-api </code></p>
+<p>Gem install
+<code>
+gem install nhentai-api
+</code></p>
 
-<p>Gemfile <code> gem &#39;nhentai-api&#39; </code></p>
+<p>Gemfile
+<code>
+gem 'nhentai-api'
+</code></p>
 
-<h2 id="label-API">API</h2>
+<h2 id="api">API</h2>
+<p>```
+doujinshi = Doujinshi.new(220794)
+puts doujinshi.title
+puts doujinshi.pages</p>
 
-<pre class="code ruby"><code class="ruby">doujinshi = Doujinshi.new(220794)
-doujinshi.title
-doujinshi.pages
-...
-</code></pre>
+<p>puts Tag.listing(‘ahegao’)
+puts Character.listing(‘2b’)
+```</p>
 
-<h2 id="label-TODO">TODO</h2>
-<ul><li>
-<p>[X] use of <a href="https://yardoc.org/">YARD</a> for documentation</p>
-</li><li>
-<p>[ ] basic search</p>
-</li><li>
-<p>[ ] multiples words search</p>
-</li><li>
-<p>[ ] exclude words search</p>
-</li><li>
-<p>[ ] tags in search</p>
-</li><li>
-<p>[ ] parodies page</p>
-</li><li>
-<p>[ ] characters page</p>
-</li><li>
-<p>[ ] artists page</p>
-</li><li>
-<p>[ ] groups page</p>
-</li><li>
-<p>[ ] languages page</p>
-</li><li>
-<p>[ ] categories page</p>
-</li></ul>
+<h2 id="documentation">Documentation</h2>
+<p>You can read the documentation here: <a href="https://www.rubydoc.info/github/groussel42/nhentai-api">https://www.rubydoc.info/github/groussel42/nhentai-api</a></p>
 
-<h2 id="label-Contributors">Contributors</h2>
-<ul><li>
-<p><a href="https://github.com/groussel42">groussel42</a> Gael Roussel - creator, maintainer</p>
-</li></ul>
+<h2 id="todo">TODO</h2>
+<p><strong>v1.0</strong>
+- [X] use of <a href="https://yardoc.org/">YARD</a> for documentation
+- [ ] basic search
+- [ ] multiples words search
+- [ ] exclude words search
+- [ ] tags in search
+- [x] tag page
+- [x] parody page
+- [x] character page
+- [x] artist page
+- [x] group page
+- [x] language page
+- [x] category page</p>
+
+<h2 id="contributors">Contributors</h2>
+
+<ul>
+  <li><a href="https://github.com/groussel42">groussel42</a> Gael Roussel - creator, maintainer</li>
+</ul>
 </div></div>
 
       <div id="footer">
-  Generated on Sat Jun  8 05:46:20 2019 by
+  Generated on Mon Jun 10 21:41:51 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.19 (ruby-2.6.3).
 </div>

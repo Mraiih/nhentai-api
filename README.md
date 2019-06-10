@@ -21,26 +21,30 @@ gem 'nhentai-api'
 ## API
 ```
 doujinshi = Doujinshi.new(220794)
-doujinshi.title
-doujinshi.pages
-...
+puts doujinshi.title
+puts doujinshi.pages
+
+puts Tag.listing('ahegao')
+puts Character.listing('2b')
 ```
 
 ## Documentation
 You can read the documentation here: [https://www.rubydoc.info/github/groussel42/nhentai-api](https://www.rubydoc.info/github/groussel42/nhentai-api)
 
 ## TODO
+**v1.0**
 - [X] use of [YARD](https://yardoc.org/) for documentation
 - [ ] basic search
 - [ ] multiples words search
 - [ ] exclude words search
 - [ ] tags in search
-- [ ] parodies page
-- [ ] characters page
-- [ ] artists page
-- [ ] groups page
-- [ ] languages page
-- [ ] categories page
+- [x] tag page
+- [x] parody page
+- [x] character page
+- [x] artist page
+- [x] group page
+- [x] language page
+- [x] category page
 
 ## Contributors
 

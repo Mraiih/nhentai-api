@@ -185,6 +185,7 @@ class Doujinshi
   #
   # Give all parodies of a doujinshi
   #
+  # @since 0.1.0
   # @see Doujinshi#tags
   #
   def parodies
@@ -196,6 +197,7 @@ class Doujinshi
   #
   # Give a counter of parodies
   #
+  # @since 0.1.0
   # @see Doujinshi#count_tags
   #
   def count_parodies
@@ -207,6 +209,7 @@ class Doujinshi
   #
   # Check if a particular doujinshi have some parodies
   #
+  # @since 0.1.0
   # @see Doujinshi#tags?
   #
   def parodies?
@@ -216,6 +219,7 @@ class Doujinshi
   #
   # Give all characters of a doujinshi
   #
+  # @since 0.1.0
   # @see Doujinshi#tags
   #
   def characters
@@ -227,6 +231,7 @@ class Doujinshi
   #
   # Give a counter of characters
   #
+  # @since 0.1.0
   # @see Doujinshi#count_tags
   #
   def count_characters
@@ -238,6 +243,7 @@ class Doujinshi
   #
   # Check if a particular doujinshi have some characters
   #
+  # @since 0.1.0
   # @see Doujinshi#tags?
   #
   def characters?
@@ -247,6 +253,7 @@ class Doujinshi
   #
   # Give all artists of a doujinshi
   #
+  # @since 0.1.0
   # @see Doujinshi#tags
   #
   def artists
@@ -258,6 +265,7 @@ class Doujinshi
   #
   # Give a counter of artists
   #
+  # @since 0.1.0
   # @see Doujinshi#count_tags
   #
   def count_artists
@@ -269,6 +277,7 @@ class Doujinshi
   #
   # Check if a particular doujinshi have some artists
   #
+  # @since 0.1.0
   # @see Doujinshi#tags?
   #
   def artists?
@@ -278,6 +287,7 @@ class Doujinshi
   #
   # Give all groups of a doujinshi
   #
+  # @since 0.1.0
   # @see Doujinshi#tags
   #
   def groups
@@ -289,6 +299,7 @@ class Doujinshi
   #
   # Give a counter of groups
   #
+  # @since 0.1.0
   # @see Doujinshi#count_tags
   #
   def count_groups
@@ -300,6 +311,7 @@ class Doujinshi
   #
   # Check if a particular doujinshi have some groups
   #
+  # @since 0.1.0
   # @see Doujinshi#tags?
   #
   def groups?
@@ -309,6 +321,7 @@ class Doujinshi
   #
   # Give all languages of a doujinshi
   #
+  # @since 0.1.0
   # @see Doujinshi#tags
   #
   def languages
@@ -320,6 +333,7 @@ class Doujinshi
   #
   # Give a counter of languages
   #
+  # @since 0.1.0
   # @see Doujinshi#count_tags
   #
   def count_languages
@@ -331,6 +345,7 @@ class Doujinshi
   #
   # Check if a particular doujinshi have some languages
   #
+  # @since 0.1.0
   # @see Doujinshi#tags?
   #
   def languages?
@@ -340,6 +355,7 @@ class Doujinshi
   #
   # Give all categories of a doujinshi
   #
+  # @since 0.1.0
   # @see Doujinshi#tags
   #
   def categories
@@ -351,6 +367,7 @@ class Doujinshi
   #
   # Give a counter of categories
   #
+  # @since 0.1.0
   # @see Doujinshi#count_tags
   #
   def count_categories
@@ -362,6 +379,7 @@ class Doujinshi
   #
   # Check if a particular doujinshi have some categories
   #
+  # @since 0.1.0
   # @see Doujinshi#tags?
   #
   def categories?
@@ -387,6 +405,15 @@ class Doujinshi
 end
 
 class Tag
+  #
+  # List all doujinshi of the page of a given tag
+  #
+  # @param [String] keyword of the research
+  # @param [Integer] sort optional, 1 is sorting by time, 2 is by popularity
+  # @param [Integer] page each page can return 25 doujinshi
+  # @return [Array] array of Info
+  # @since 0.2.0
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
@@ -396,6 +423,9 @@ class Tag
     parse_tags(res)
   end
 
+  #
+  # @private
+  #
   def self.parse_tags(res)
     res.map do |line|
       id    = line.match(%r{/g/(\d+)/})[1]
@@ -409,6 +439,12 @@ class Tag
 end
 
 class Parody < Tag
+  #
+  # List all doujinshi of the page of a given parody
+  #
+  # @since 0.2.0
+  # @see Tag#listing
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
@@ -420,6 +456,12 @@ class Parody < Tag
 end
 
 class Character < Tag
+  #
+  # List all doujinshi of the page of a given character
+  #
+  # @since 0.2.0
+  # @see Tag#listing
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
@@ -431,6 +473,12 @@ class Character < Tag
 end
 
 class Artist < Tag
+  #
+  # List all doujinshi of the page of a given artists
+  #
+  # @since 0.2.0
+  # @see Tag#listing
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
@@ -442,6 +490,12 @@ class Artist < Tag
 end
 
 class Group < Tag
+  #
+  # List all doujinshi of the page of a given group
+  #
+  # @since 0.2.0
+  # @see Tag#listing
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
@@ -453,6 +507,12 @@ class Group < Tag
 end
 
 class Language < Tag
+  #
+  # List all doujinshi of the page of a given language
+  #
+  # @since 0.2.0
+  # @see Tag#listing
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
@@ -464,6 +524,12 @@ class Language < Tag
 end
 
 class Category < Tag
+  #
+  # List all doujinshi of the page of a given category
+  #
+  # @since 0.2.0
+  # @see Tag#listing
+  #
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
