@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.files       = ['lib/nhentai-api.rb']
   s.homepage    = 'https://rubygems.org/gems/nhentai-api'
   s.metadata    = {
-    "documentation_uri" => "",
+    "documentation_uri" => "https://www.rubydoc.info/github/groussel42/nhentai-api",
     "source_code_uri" => "https://github.com/groussel42/nhentai-api"
   }
   s.license     = 'MIT'

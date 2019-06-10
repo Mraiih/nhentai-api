@@ -1,7 +1,7 @@
 require 'net/http'
 require 'time'
 
-class Tag
+class Info
   attr_reader :id, :name, :count, :url
 
   def initialize(id, name, count, url)
@@ -18,8 +18,10 @@ class Doujinshi
   def initialize(id)
     @id           = id
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
-    @media_id     = @client.body.match(%r{\/([0-9]+)\/cover.jpg})[1]
-    @count_pages  = @client.body.match(/([0-9]+) pages/)[1].to_i
+    if self.exists?
+      @media_id     = @client.body.match(%r{\/([0-9]+)\/cover.jpg})[1]
+      @count_pages  = @client.body.match(/([0-9]+) pages/)[1].to_i
+    end
   end
 
   #
@@ -31,7 +33,7 @@ class Doujinshi
   #   doujinshi.exists?   #=> true
   #
   def exists?
-    @client.code == 200
+    @client.code == '200'
   end
 
   #
@@ -379,7 +381,29 @@ class Doujinshi
       count = line.match(/\((.+?)\)</)[1].tr(',', '').to_i
       url   = line.match(/href=\"(.+?)\"/)[1]
 
-      Tag.new(id, name, count, url)
+      Info.new(id, name, count, url)
+    end
+  end
+end
+
+class Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/tag/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+
+  def self.parse_tags(res)
+    res.map do |line|
+      id    = line.match(%r{/g/(\d+)/})[1]
+      name  = line.match(%r{<div class="caption">(.+)</div>})[1].strip
+      count = 1
+      url   = "/g/#{id}"
+
+      Info.new(id, name, count, url)
     end
   end
 end
