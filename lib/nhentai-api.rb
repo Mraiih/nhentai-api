@@ -407,3 +407,14 @@ class Tag
     end
   end
 end
+
+class Artist < Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/artist/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+end
