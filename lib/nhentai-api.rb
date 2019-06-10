@@ -408,11 +408,66 @@ class Tag
   end
 end
 
+class Parody < Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/parody/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+end
+
+class Character < Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/character/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+end
+
 class Artist < Tag
   def self.listing(keyword, sort = 1, page = 1)
     keyword.tr!(' ', '-')
     sort = sort == 1 ? '' : 'popular'
     client = Net::HTTP.get_response(URI("https://nhentai.net/artist/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+end
+
+class Group < Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/group/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+end
+
+class Language < Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/language/#{keyword}/#{sort}?page=#{page}"))
+    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+
+    parse_tags(res)
+  end
+end
+
+class Category < Tag
+  def self.listing(keyword, sort = 1, page = 1)
+    keyword.tr!(' ', '-')
+    sort = sort == 1 ? '' : 'popular'
+    client = Net::HTTP.get_response(URI("https://nhentai.net/category/#{keyword}/#{sort}?page=#{page}"))
     res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
 
     parse_tags(res)
