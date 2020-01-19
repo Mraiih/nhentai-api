@@ -19,7 +19,7 @@ class Doujinshi
     @id           = id
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
     if self.exists?
-      @media_id     = @client.body.match(%r{\/([0-9]+)\/cover.jpg})[1]
+      @media_id     = @client.body.match(%r{\/([0-9]+)\/cover})[1]
       @count_pages  = @client.body.match(/([0-9]+) pages/)[1].to_i
     end
   end
@@ -57,7 +57,9 @@ class Doujinshi
   #   doujinshi.cover   #=> 'https://t.nhentai.net/galleries/1170172/cover.jpg'
   #
   def cover
-    "https://t.nhentai.net/galleries/#{@media_id}/cover.jpg"
+    res = @client.body.match(%r{https://t.nhentai.net/galleries/#{@media_id}/cover\.(.{3})"})
+
+    "https://t.nhentai.net/galleries/#{@media_id}/cover.#{res[1]}"
   end
 
   #
