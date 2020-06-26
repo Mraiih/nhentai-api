@@ -19,8 +19,10 @@ class Doujinshi
     @id           = id
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
     if self.exists?
-      @media_id     = @client.body.match(%r{\/([0-9]+)\/cover})[1]
-      @count_pages  = @client.body.match(/([0-9]+) pages/)[1].to_i
+      #previous media_id regex %r{\/([0-9]+)\/cover}
+      #previous @count_pages regex /([0-9]+) pages/
+      @media_id     = @client.body.match(%r{\/Cover:\s*.*/\(0-9+)</})[1]
+      @count_pages  = @client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
     end
   end
 
