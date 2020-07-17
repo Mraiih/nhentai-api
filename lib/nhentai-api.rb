@@ -20,7 +20,7 @@ class Doujinshi
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
     if self.exists?
       @media_id     = @client.body.match(%r{\/([0-9]+)\/cover})[1]
-      @count_pages  = @client.body.match(/([0-9]+) pages/)[1].to_i
+      @count_pages  = @client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
     end
   end
 
@@ -45,7 +45,7 @@ class Doujinshi
   #   doujinshi.title   #=> '[Illumination. (Ogadenmon)] Android no Ecchi na Yatsu | Horny Androids (NieR:Automata) [English] =TLL + mrwayne= [Digital]'
   #
   def title
-    @client.body.match(%r{<div id="info">\s+<h1>(.+)<\/h1>})[1]
+    @client.body.match(/"pretty">(.*?)</)[1]
   end
 
   #
@@ -141,7 +141,7 @@ class Doujinshi
   #   doujinshi.upload_date   #=> 2018-01-17 15:56:16 +0000
   #
   def upload_date
-    Time.iso8601(@client.body.match(/datetime="(.+)"/)[1])
+    Time.iso8601(@client.body.match(/<time .+ datetime="(.*?)"/)[1])
   end
 
   #
@@ -154,6 +154,7 @@ class Doujinshi
   #
   def tags
     res = @client.body.match(%r{Tags:\s*<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -192,6 +193,7 @@ class Doujinshi
   #
   def parodies
     res = @client.body.match(%r{Parodies:\s+<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -226,6 +228,7 @@ class Doujinshi
   #
   def characters
     res = @client.body.match(%r{Characters:\s+<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -260,6 +263,7 @@ class Doujinshi
   #
   def artists
     res = @client.body.match(%r{Artists:\s+<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -294,6 +298,7 @@ class Doujinshi
   #
   def groups
     res = @client.body.match(%r{Groups:\s+<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -328,6 +333,7 @@ class Doujinshi
   #
   def languages
     res = @client.body.match(%r{Languages:\s+<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -362,6 +368,7 @@ class Doujinshi
   #
   def categories
     res = @client.body.match(%r{Categories:\s+<span class="tags">(.+)<\/span>})
+    return [] if res.nil?
 
     parse_tags(res[1])
   end
@@ -398,8 +405,10 @@ class Doujinshi
     res.split(%r{<a(.+?)<\/a>}).reject(&:empty?).map do |line|
       id    = line.match(/tag-(\d+)/)[1]
       name  = line.match(/">(.+?)</)[1].strip
-      count = line.match(/\((.+?)\)</)[1].tr(',', '').to_i
+      count = line.match(/class="count">(\d+.)</)[1]
       url   = line.match(/href=\"(.+?)\"/)[1]
+
+      count = count[-1] == 'K' ? count.to_i * 1000 : count.to_i
 
       Info.new(id, name, count, url)
     end

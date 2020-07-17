@@ -48,4 +48,4 @@ You can read the documentation here: [https://www.rubydoc.info/github/groussel42
 
 ## Contributors
 
-- [groussel42](https://github.com/groussel42) Gael Roussel - creator, maintainer
+- [Mraiih](https://github.com/Mraiih) Gael Roussel - creator, maintainer
