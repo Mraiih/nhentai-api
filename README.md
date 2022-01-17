@@ -29,7 +29,7 @@ puts Character.listing('2b')
 ```
 
 ## Documentation
-You can read the documentation here: [https://www.rubydoc.info/github/groussel42/nhentai-api](https://www.rubydoc.info/github/groussel42/nhentai-api)
+You can read the documentation here: [https://www.rubydoc.info/github/Mraiih/nhentai-api](https://www.rubydoc.info/github/Mraiih/nhentai-api/master)
 
 ## TODO
 **v1.0**
