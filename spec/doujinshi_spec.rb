@@ -108,7 +108,7 @@ RSpec.describe Doujinshi do
 
   describe "#tags" do
     it "returns the list of tags" do
-      tag = OpenStruct.new(id: "35762", name: "<span class=\"name\">sole female", count: 74000, url: "/tag/sole-female/")
+      tag = OpenStruct.new(id: "35762", name: "sole female", count: 74000, url: "/tag/sole-female/")
 
       expect(doujin.tags).to include(tag)
     end
@@ -144,7 +144,7 @@ RSpec.describe Doujinshi do
 
   describe "#parodies" do
     it "returns the list of parodies" do
-      parody = OpenStruct.new(id: "73370", name: "<span class=\"name\">nier automata", count: 122, url: "/parody/nier-automata/")
+      parody = OpenStruct.new(id: "73370", name: "nier automata", count: 122, url: "/parody/nier-automata/")
 
       expect(doujin.parodies).to include(parody)
     end
@@ -180,7 +180,7 @@ RSpec.describe Doujinshi do
 
   describe "#characters" do
     it "returns the list of characters" do
-      character = OpenStruct.new(id: "71544", name: "<span class=\"name\">2b", count: 117, url: "/character/2b/")
+      character = OpenStruct.new(id: "71544", name: "2b", count: 117, url: "/character/2b/")
 
       expect(doujin.characters).to include(character)
     end
@@ -216,7 +216,7 @@ RSpec.describe Doujinshi do
 
   describe "#artists" do
     it "returns the list of artists" do
-      artist = OpenStruct.new(id: "10644", name: "<span class=\"name\">ogadenmon", count: 67, url: "/artist/ogadenmon/")
+      artist = OpenStruct.new(id: "10644", name: "ogadenmon", count: 67, url: "/artist/ogadenmon/")
 
       expect(doujin.artists).to include(artist)
     end
@@ -252,7 +252,7 @@ RSpec.describe Doujinshi do
 
   describe "#groups" do
     it "returns the list of groups" do
-      group = OpenStruct.new(id: "35330", name: "<span class=\"name\">illumination.", count: 35, url: "/group/illumination/")
+      group = OpenStruct.new(id: "35330", name: "illumination.", count: 35, url: "/group/illumination/")
 
       expect(doujin.groups).to include(group)
     end
@@ -288,7 +288,7 @@ RSpec.describe Doujinshi do
 
   describe "#languages" do
     it "returns the list of languages" do
-      language = OpenStruct.new(id: "12227", name: "<span class=\"name\">english", count: 75000, url: "/language/english/")
+      language = OpenStruct.new(id: "12227", name: "english", count: 75000, url: "/language/english/")
 
       expect(doujin.languages).to include(language)
     end
@@ -324,7 +324,7 @@ RSpec.describe Doujinshi do
 
   describe "#categories" do
     it "returns the list of categories" do
-      category = OpenStruct.new(id: "33172", name: "<span class=\"name\">doujinshi", count: 243000, url: "/category/doujinshi/")
+      category = OpenStruct.new(id: "33172", name: "doujinshi", count: 243000, url: "/category/doujinshi/")
 
       expect(doujin.categories).to include(category)
     end

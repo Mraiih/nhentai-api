@@ -394,7 +394,7 @@ class Doujinshi
   def parse_tags(res)
     res.split(%r{<a(.+?)<\/a>}).reject(&:empty?).map do |line|
       id    = line.match(/tag-(\d+)/)[1]
-      name  = line.match(/">(.+?)</)[1].strip
+      name  = line.match(/class="name">(.+?)</)[1].strip
       count = line.match(/class="count">(\d+.)</)[1]
       url   = line.match(/href=\"(.+?)\"/)[1]
 
