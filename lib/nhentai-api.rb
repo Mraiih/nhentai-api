@@ -1,16 +1,6 @@
-require 'net/http'
-require 'time'
-
-class Info
-  attr_reader :id, :name, :count, :url
-
-  def initialize(id, name, count, url)
-    @id     = id
-    @name   = name
-    @count  = count
-    @url    = url
-  end
-end
+require "net/http"
+require "time"
+require "ostruct"
 
 class Doujinshi
   attr_reader :id, :client, :media_id, :count_pages
@@ -18,10 +8,10 @@ class Doujinshi
   def initialize(id)
     @id           = id
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
-    if self.exists?
-      @media_id     = @client.body.match(%r{\/([0-9]+)\/cover})[1]
-      @count_pages  = @client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
-    end
+    return unless exists?
+
+    @media_id     = @client.body.match(%r{\/([0-9]+)\/cover})[1]
+    @count_pages  = @client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
   end
 
   #
@@ -69,8 +59,8 @@ class Doujinshi
   # @return [String] the URL of a given page of a doujinshi
   # @since 0.1.0
   # @example
-  #   doujinshi.get_page        #=> 'https://i.nhentai.net/galleries/1170172/1.jpg'
-  #   doujinshi.get_page(10)    #=> 'https://i.nhentai.net/galleries/1170172/10.jpg'
+  #   doujinshi.page        #=> 'https://i.nhentai.net/galleries/1170172/1.jpg'
+  #   doujinshi.page(10)    #=> 'https://i.nhentai.net/galleries/1170172/10.jpg'
   #
   def page(page = 1)
     res = @client.body.match(%r{https://t.nhentai.net/galleries/#{@media_id}/#{page}t\.(.{3})"})
@@ -97,8 +87,8 @@ class Doujinshi
   # @return [String] the thumbnail's URL of a given page of a doujinshi
   # @since 0.1.0
   # @example
-  #   doujinshi.get_thumbnail       #=> 'https://t.nhentai.net/galleries/1170172/1t.jpg'
-  #   doujinshi.get_thumbnail(10)   #=> 'https://t.nhentai.net/galleries/1170172/10t.jpg'
+  #   doujinshi.thumbnail       #=> 'https://t.nhentai.net/galleries/1170172/1t.jpg'
+  #   doujinshi.thumbnail(10)   #=> 'https://t.nhentai.net/galleries/1170172/10t.jpg'
   #
   def thumbnail(page = 1)
     res = @client.body.match(%r{https://t.nhentai.net/galleries/#{@media_id}/(#{page}t\..{3})"})
@@ -124,7 +114,7 @@ class Doujinshi
   # @return [Integer] a counter of favorites on a given doujinshi
   # @since 0.1.0
   # @example
-  #   doujinshi.num_favorites   #=> 13326
+  #   doujinshi.count_favorites   #=> 13326
   #
   def count_favorites
     regex = %r{<span>Favorite <span class="nobold">.(\d+).<\/span><\/span>}
@@ -410,7 +400,7 @@ class Doujinshi
 
       count = count[-1] == 'K' ? count.to_i * 1000 : count.to_i
 
-      Info.new(id, name, count, url)
+      OpenStruct.new(id: id, name: name, count: count, url: url)
     end
   end
 end
@@ -444,7 +434,7 @@ class Tag
       count = 1
       url   = "/g/#{id}"
 
-      Info.new(id, name, count, url)
+      OpenStruct.new(id: id, name: name, count: count, url: url)
     end
   end
 end
