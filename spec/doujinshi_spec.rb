@@ -4,7 +4,7 @@ require "nhentai-api"
 
 RSpec.describe Doujinshi do
   subject(:doujin) { described_class.new(id) }
-  let(:id) { 220794 }
+  let!(:id) { 220794 }
 
   describe "#initialize" do
     it { is_expected.to have_attributes(id: 220794, media_id: "1170172", count_pages: 31) }

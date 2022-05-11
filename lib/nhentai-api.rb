@@ -1,9 +1,10 @@
 require "net/http"
-require "time"
 require "ostruct"
+require "time"
+require "json"
 
 class Doujinshi
-  attr_reader :id, :client, :media_id, :count_pages
+  attr_reader :id, :client, :media_id, :count_pages, :response
 
   def initialize(id)
     @id           = id
@@ -23,7 +24,7 @@ class Doujinshi
   #   doujinshi.exists?   #=> true
   #
   def exists?
-    @client.code == '200'
+    client.code == '200'
   end
 
   #
@@ -77,7 +78,7 @@ class Doujinshi
   #   doujinshi.pages   #=> ['https://i.nhentai.net/galleries/1170172/1.jpg', ..., 'https://i.nhentai.net/galleries/1170172/31.jpg']
   #
   def pages
-    (1..@count_pages).map { |page| page(page) }
+    (1..count_pages).map { |page| page(page) }
   end
 
   #
@@ -142,12 +143,6 @@ class Doujinshi
   # @example
   #   doujinshi.tags
   #
-  def tags
-    res = @client.body.match(%r{Tags:\s*<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of tags
@@ -157,11 +152,6 @@ class Doujinshi
   # @example
   #   doujinshi.count_tags    #=> 9
   #
-  def count_tags
-    res = @client.body.match(%r{Tags:\s*<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some tags
@@ -171,9 +161,6 @@ class Doujinshi
   # @example
   #   doujinshi.tags?   #=> true
   #
-  def tags?
-    !@client.body.match(%r{Tags:\s*<span class="tags">(.+)<\/span>}).nil?
-  end
 
   #
   # Give all parodies of a doujinshi
@@ -181,12 +168,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags
   #
-  def parodies
-    res = @client.body.match(%r{Parodies:\s+<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of parodies
@@ -194,11 +175,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#count_tags
   #
-  def count_parodies
-    res = @client.body.match(%r{Parodies:\s+<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some parodies
@@ -206,9 +182,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags?
   #
-  def parodies?
-    !@client.body.match(%r{Parodies:\s+<span class="tags">(.+)<\/span>}).nil?
-  end
 
   #
   # Give all characters of a doujinshi
@@ -216,12 +189,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags
   #
-  def characters
-    res = @client.body.match(%r{Characters:\s+<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of characters
@@ -229,11 +196,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#count_tags
   #
-  def count_characters
-    res = @client.body.match(%r{Characters:\s+<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some characters
@@ -241,9 +203,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags?
   #
-  def characters?
-    !@client.body.match(%r{Characters:\s+<span class="tags">(.+)<\/span>}).nil?
-  end
 
   #
   # Give all artists of a doujinshi
@@ -251,12 +210,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags
   #
-  def artists
-    res = @client.body.match(%r{Artists:\s+<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of artists
@@ -264,11 +217,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#count_tags
   #
-  def count_artists
-    res = @client.body.match(%r{Artists:\s+<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some artists
@@ -276,9 +224,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags?
   #
-  def artists?
-    !@client.body.match(%r{Artists:\s+<span class="tags">(.+)<\/span>}).nil?
-  end
 
   #
   # Give all groups of a doujinshi
@@ -286,12 +231,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags
   #
-  def groups
-    res = @client.body.match(%r{Groups:\s+<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of groups
@@ -299,11 +238,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#count_tags
   #
-  def count_groups
-    res = @client.body.match(%r{Groups:\s+<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some groups
@@ -311,9 +245,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags?
   #
-  def groups?
-    !@client.body.match(%r{Groups:\s+<span class="tags">(.+)<\/span>}).nil?
-  end
 
   #
   # Give all languages of a doujinshi
@@ -321,12 +252,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags
   #
-  def languages
-    res = @client.body.match(%r{Languages:\s+<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of languages
@@ -334,11 +259,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#count_tags
   #
-  def count_languages
-    res = @client.body.match(%r{Languages:\s+<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some languages
@@ -346,9 +266,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags?
   #
-  def languages?
-    !@client.body.match(%r{Languages:\s+<span class="tags">(.+)<\/span>}).nil?
-  end
 
   #
   # Give all categories of a doujinshi
@@ -356,12 +273,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags
   #
-  def categories
-    res = @client.body.match(%r{Categories:\s+<span class="tags">(.+)<\/span>})
-    return [] if res.nil?
-
-    parse_tags(res[1])
-  end
 
   #
   # Give a counter of categories
@@ -369,11 +280,6 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#count_tags
   #
-  def count_categories
-    res = @client.body.match(%r{Categories:\s+<span class="tags">(.+)<\/span>})
-
-    res.nil? ? 0 : parse_tags(res[1]).length
-  end
 
   #
   # Check if a particular doujinshi have some categories
@@ -381,8 +287,24 @@ class Doujinshi
   # @since 0.1.0
   # @see Doujinshi#tags?
   #
-  def categories?
-    !@client.body.match(%r{Categories:\s+<span class="tags">(.+)<\/span>}).nil?
+
+  %w[tags parodies characters artists groups languages categories].each do |method|
+    define_method method do
+      return instance_variable_get("@#{method}") if instance_variable_defined?("@#{method}")
+
+      res = @client.body.match(%r{#{method.capitalize}:\s*<span class="tags">(.+)<\/span>})
+      return [] if res.nil?
+
+      instance_variable_set("@#{method}", parse_tags(res[1]))
+    end
+
+    define_method "count_#{method}" do
+      send(method).size
+    end
+
+    define_method "#{method}?" do
+      !send(method).empty?
+    end
   end
 
   #
