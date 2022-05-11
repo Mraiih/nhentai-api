@@ -1,6 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/nhentai-api.png)](https://badge.fury.io/rb/nhentai-api)
 ![](https://ruby-gem-downloads-badge.herokuapp.com/nhentai-api?type=total&color=red&style=flat)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![Maintainability](https://api.codeclimate.com/v1/badges/02e6104284d2f96e502c/maintainability)](https://codeclimate.com/github/Mraiih/nhentai-api/maintainability)
 
 # nhentai-api
 
