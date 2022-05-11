@@ -25,15 +25,53 @@ puts doujinshi.title
 puts doujinshi.pages
 
 puts Tag.listing('ahegao')
-puts Character.listing('2b')
+puts Character.listing('2b', 0, 1)
 ```
 
-## Documentation
-You can read the documentation here: [https://www.rubydoc.info/github/Mraiih/nhentai-api](https://www.rubydoc.info/github/Mraiih/nhentai-api/master)
+## Methods
+Doujinshi#new  
+Doujinshi#exists?  
+Doujinshi#title  
+Doujinshi#cover  
+Doujinshi#page  
+Doujinshi#pages  
+Doujinshi#thumbnail  
+Doujinshi#thumbnails  
+Doujinshi#count_favorites  
+Doujinshi#upload_date  
+
+Doujinshi#tags  
+Doujinshi#count_tags  
+Doujinshi#tags?  
+Doujinshi#parodies  
+Doujinshi#count_parodies  
+Doujinshi#parodies?  
+Doujinshi#characters  
+Doujinshi#count_characters  
+Doujinshi#characters?  
+Doujinshi#artists  
+Doujinshi#count_artists  
+Doujinshi#artists?  
+Doujinshi#groups  
+Doujinshi#count_groups  
+Doujinshi#groups?  
+Doujinshi#languages  
+Doujinshi#count_languages  
+Doujinshi#languages?  
+Doujinshi#categories  
+Doujinshi#count_categories  
+Doujinshi#categories?  
+
+Tag.listing  
+Parody.listing  
+Character.listing  
+Artist.listing  
+Group.listing  
+Language.listing  
+Category.listing  
 
 ## TODO
 **v1.0**
-- [X] use of [YARD](https://yardoc.org/) for documentation
 - [ ] basic search
 - [ ] multiples words search
 - [ ] exclude words search
