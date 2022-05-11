@@ -327,138 +327,94 @@ class Doujinshi
   end
 end
 
-class Tag
-  #
-  # List all doujinshi of the page of a given tag
-  #
-  # @param [String] keyword of the research
-  # @param [Integer] sort optional, 1 is sorting by time, 2 is by popularity
-  # @param [Integer] page each page can return 25 doujinshi
-  # @return [Array] array of Info
-  # @since 0.2.0
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/tag/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
+#
+# List all doujinshi of the page of a given tag
+#
+# @param [String] keyword of the research
+# @param [Integer] sort optional, 1 is sorting by time, 2 is by popularity
+# @param [Integer] page each page can return 25 doujinshi
+# @return [Array] array of Info
+# @since 0.2.0
+#
 
-    parse_tags(res)
-  end
+#
+# List all doujinshi of the page of a given parody
+#
+# @since 0.2.0
+# @see Tag#listing
+#
 
-  #
-  # @private
-  #
-  def self.parse_tags(res)
-    res.map do |line|
-      id    = line.match(%r{/g/(\d+)/})[1]
-      name  = line.match(%r{<div class="caption">(.+)</div>})[1].strip
-      count = 1
-      url   = "/g/#{id}"
+#
+# List all doujinshi of the page of a given character
+#
+# @since 0.2.0
+# @see Tag#listing
+#
 
-      OpenStruct.new(id: id, name: name, count: count, url: url)
+#
+# List all doujinshi of the page of a given artists
+#
+# @since 0.2.0
+# @see Tag#listing
+#
+
+#
+# List all doujinshi of the page of a given group
+#
+# @since 0.2.0
+# @see Tag#listing
+#
+
+#
+# List all doujinshi of the page of a given language
+#
+# @since 0.2.0
+# @see Tag#listing
+#
+
+#
+# List all doujinshi of the page of a given category
+#
+# @since 0.2.0
+# @see Tag#listing
+#
+
+%w[tag parody character artist group language category].each do |class_name|
+  c = Class.new do
+
+    def self.listing(keyword, sort = 1, page = 1)
+      class_name  = name.split('::').last.downcase
+      keyword     = keyword.tr(' ', '-')
+      sort        = sort == 1 ? '' : 'popular'
+      @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/#{sort}?page=#{page}"))
+      return unless exists?
+
+      res = @client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
+
+      parse_tags(res)
+    end
+
+    #
+    # @private
+    #
+
+    private
+
+    def self.exists?
+      @client.code == '200'
+    end
+
+    def self.parse_tags(res)
+      res.map do |line|
+        id    = line.match(%r{/g/(\d+)/})[1]
+        name  = line.match(%r{<div class="caption">(.+)})[1].strip
+        count = 1
+        url   = "/g/#{id}"
+
+        OpenStruct.new(id: id, name: name, count: count, url: url)
+      end
     end
   end
-end
 
-class Parody < Tag
-  #
-  # List all doujinshi of the page of a given parody
-  #
-  # @since 0.2.0
-  # @see Tag#listing
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/parody/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
-
-    parse_tags(res)
-  end
-end
-
-class Character < Tag
-  #
-  # List all doujinshi of the page of a given character
-  #
-  # @since 0.2.0
-  # @see Tag#listing
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/character/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
-
-    parse_tags(res)
-  end
-end
-
-class Artist < Tag
-  #
-  # List all doujinshi of the page of a given artists
-  #
-  # @since 0.2.0
-  # @see Tag#listing
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/artist/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
-
-    parse_tags(res)
-  end
-end
-
-class Group < Tag
-  #
-  # List all doujinshi of the page of a given group
-  #
-  # @since 0.2.0
-  # @see Tag#listing
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/group/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
-
-    parse_tags(res)
-  end
-end
-
-class Language < Tag
-  #
-  # List all doujinshi of the page of a given language
-  #
-  # @since 0.2.0
-  # @see Tag#listing
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/language/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
-
-    parse_tags(res)
-  end
-end
-
-class Category < Tag
-  #
-  # List all doujinshi of the page of a given category
-  #
-  # @since 0.2.0
-  # @see Tag#listing
-  #
-  def self.listing(keyword, sort = 1, page = 1)
-    keyword.tr!(' ', '-')
-    sort = sort == 1 ? '' : 'popular'
-    client = Net::HTTP.get_response(URI("https://nhentai.net/category/#{keyword}/#{sort}?page=#{page}"))
-    res = client.body.split(%r{<div class="gallery".+?>(.+)</div>}).select { |line| line.include?('<a href="/g/') }
-
-    parse_tags(res)
-  end
+  Kernel.const_set(class_name.capitalize, c)
 end
