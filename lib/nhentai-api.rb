@@ -124,7 +124,7 @@ end
     end
 
     def self.listing(keyword, sort = 1, page = 1)
-      class_name  = name.split('::').last.downcase.tr(' ', '-')
+      class_name  = name.split('::').last.downcase
       keyword     = keyword.tr(' ', '-')
       sort        = sort == 1 ? '' : 'popular'
       @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/#{sort}?page=#{page}"))
