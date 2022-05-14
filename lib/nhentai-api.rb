@@ -1,7 +1,9 @@
-require "net/http"
-require "ostruct"
-require "time"
-require "json"
+# frozen_string_literal: true
+
+require 'net/http'
+require 'ostruct'
+require 'time'
+require 'json'
 
 class Doujinshi
   attr_reader :id, :client, :media_id, :count_pages, :response
@@ -16,7 +18,7 @@ class Doujinshi
   end
 
   def exists?
-    client.code == '200'
+    @client.code == '200'
   end
 
   def title
@@ -24,13 +26,13 @@ class Doujinshi
   end
 
   def cover
-    res = @client.body.match(%r{https://t.nhentai.net/galleries/#{@media_id}/cover\.(.{3})"})
+    res = @client.body.match(%r{https://t.*.nhentai.net/galleries/#{@media_id}/cover\.(.{3})"})
 
     "https://t.nhentai.net/galleries/#{@media_id}/cover.#{res[1]}"
   end
 
   def page(page = 1)
-    res = @client.body.match(%r{https://t.nhentai.net/galleries/#{@media_id}/#{page}t\.(.{3})"})
+    res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/#{page}t\.(.{3})"})
 
     "https://i.nhentai.net/galleries/#{@media_id}/#{page}.#{res[1]}"
   end
@@ -40,7 +42,7 @@ class Doujinshi
   end
 
   def thumbnail(page = 1)
-    res = @client.body.match(%r{https://t.nhentai.net/galleries/#{@media_id}/(#{page}t\..{3})"})
+    res = @client.body.match(%r{https://t.*.nhentai.net/galleries/#{@media_id}/(#{page}t\..{3})"})
 
     "https://t.nhentai.net/galleries/#{@media_id}/#{res[1]}"
   end
@@ -66,7 +68,7 @@ class Doujinshi
       res = @client.body.match(%r{#{method.capitalize}:\s*<span class="tags">(.+)<\/span>})
       return [] if res.nil?
 
-      instance_variable_set("@#{method}", parse_tags(res[1]))
+      instance_variable_set("@#{method}", parsing_informations(res[1]))
     end
 
     define_method "count_#{method}" do
@@ -80,32 +82,55 @@ class Doujinshi
 
   private
 
-  def parse_tags(res)
+  def parsing_informations(res)
     res.split(%r{<a(.+?)<\/a>}).reject(&:empty?).map do |line|
-      id    = line.match(/tag-(\d+)/)[1]
-      name  = line.match(/class="name">(.+?)</)[1].strip
-      count = line.match(/class="count">(\d+.)</)[1]
-      url   = line.match(/href=\"(.+?)\"/)[1]
-
-      count = count[-1] == 'K' ? count.to_i * 1000 : count.to_i
+      id    = parse_id(line)
+      name  = parse_name(line)
+      count = parse_count(line)
+      url   = parse_url(line)
 
       OpenStruct.new(id: id, name: name, count: count, url: url)
     end
+  end
+
+  def parse_id(line)
+    line.match(/tag-(\d+)/)[1]
+  end
+
+  def parse_name(line)
+    line.match(/class="name">(.+?)</)[1].strip
+  end
+
+  def parse_count(line)
+    count = line.match(/class="count">(\d+.)</)[1]
+
+    count[-1] == 'K' ? count.to_i * 1000 : count.to_i
+  end
+
+  def parse_url(line)
+    line.match(/href=\"(.+?)\"/)[1]
   end
 end
 
 %w[tag parody character artist group language category].each do |class_name|
   c = Class.new do
+    def self.count(keyword)
+      class_name  = name.split('::').last.downcase
+      keyword     = keyword.tr(' ', '-')
+      @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/"))
+      return unless exists?
+
+      @client.body.match(%r{<a.*class="count">(.*)<\/span><\/a>})[1].to_i
+    end
 
     def self.listing(keyword, sort = 1, page = 1)
-      class_name  = name.split('::').last.downcase
+      class_name  = name.split('::').last.downcase.tr(' ', '-')
       keyword     = keyword.tr(' ', '-')
       sort        = sort == 1 ? '' : 'popular'
       @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/#{sort}?page=#{page}"))
       return unless exists?
 
       res = @client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
-
       parse_tags(res)
     end
 
@@ -118,11 +143,10 @@ end
     def self.parse_tags(res)
       res.map do |line|
         id    = line.match(%r{/g/(\d+)/})[1]
-        name  = line.match(%r{<div class="caption">(.+)})[1].strip
-        count = 1
+        name  = line.match(/<div class="caption">(.+)/)[1].strip
         url   = "/g/#{id}"
 
-        OpenStruct.new(id: id, name: name, count: count, url: url)
+        OpenStruct.new(id: id, name: name, url: url)
       end
     end
   end
