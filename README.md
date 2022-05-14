@@ -63,12 +63,19 @@ Doujinshi#categories
 Doujinshi#count_categories  
 Doujinshi#categories?  
 
+Tag.count  
 Tag.listing  
+Parody.count  
 Parody.listing  
+Character.count  
 Character.listing  
+Artist.count  
 Artist.listing  
+Group.count  
 Group.listing  
+Language.count  
 Language.listing  
+Category.count  
 Category.listing  
 
 ## TODO
