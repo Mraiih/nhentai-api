@@ -13,28 +13,28 @@ class Doujinshi
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
     return unless exists?
 
-    @media_id     = @client.body.match(%r{\/([0-9]+)\/cover})[1]
-    @count_pages  = @client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
+    @media_id     = client.body.match(%r{\/([0-9]+)\/cover})[1]
+    @count_pages  = client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
   end
 
   def exists?
-    @client.code == '200'
+    client.code == '200'
   end
 
   def title
-    @client.body.match(/"pretty">(.*?)</)[1]
+    client.body.match(/"pretty">(.*?)</)[1]
   end
 
   def cover
-    res = @client.body.match(%r{https://t.*.nhentai.net/galleries/#{@media_id}/cover\.(.{3})"})
+    res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/cover\.(.{3})"})
 
-    "https://t.nhentai.net/galleries/#{@media_id}/cover.#{res[1]}"
+    "https://t.nhentai.net/galleries/#{media_id}/cover.#{res[1]}"
   end
 
   def page(page = 1)
     res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/#{page}t\.(.{3})"})
 
-    "https://i.nhentai.net/galleries/#{@media_id}/#{page}.#{res[1]}"
+    "https://i.nhentai.net/galleries/#{media_id}/#{page}.#{res[1]}"
   end
 
   def pages
@@ -42,30 +42,30 @@ class Doujinshi
   end
 
   def thumbnail(page = 1)
-    res = @client.body.match(%r{https://t.*.nhentai.net/galleries/#{@media_id}/(#{page}t\..{3})"})
+    res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/(#{page}t\..{3})"})
 
-    "https://t.nhentai.net/galleries/#{@media_id}/#{res[1]}"
+    "https://t.nhentai.net/galleries/#{media_id}/#{res[1]}"
   end
 
   def thumbnails
-    (1..@count_pages).map { |page| thumbnail(page) }
+    (1..count_pages).map { |page| thumbnail(page) }
   end
 
   def count_favorites
     regex = %r{<span>Favorite <span class="nobold">.(\d+).<\/span><\/span>}
 
-    @client.body.match(regex)[1].to_i
+    client.body.match(regex)[1].to_i
   end
 
   def upload_date
-    Time.iso8601(@client.body.match(/<time .+ datetime="(.*?)"/)[1])
+    Time.iso8601(client.body.match(/<time .+ datetime="(.*?)"/)[1])
   end
 
   %w[tags parodies characters artists groups languages categories].each do |method|
     define_method method do
       return instance_variable_get("@#{method}") if instance_variable_defined?("@#{method}")
 
-      res = @client.body.match(%r{#{method.capitalize}:\s*<span class="tags">(.+)<\/span>})
+      res = client.body.match(%r{#{method.capitalize}:\s*<span class="tags">(.+)<\/span>})
       return [] if res.nil?
 
       instance_variable_set("@#{method}", parsing_informations(res[1]))
