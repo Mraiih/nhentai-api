@@ -115,7 +115,6 @@ end
 %w[tag parody character artist group language category].each do |class_name|
   c = Class.new do
     def self.count(keyword)
-      class_name  = name.split('::').last.downcase
       keyword     = keyword.tr(' ', '-')
       @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/"))
       return unless exists?
@@ -124,10 +123,7 @@ end
     end
 
     def self.listing(keyword, sort = 1, page = 1)
-      class_name  = name.split('::').last.downcase
-      keyword     = keyword.tr(' ', '-')
-      sort        = sort == 1 ? '' : 'popular'
-      @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/#{sort}?page=#{page}"))
+      @client = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword.tr(' ', '-')}/#{sort_method(sort)}?page=#{page}"))
       return unless exists?
 
       res = @client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
@@ -135,6 +131,14 @@ end
     end
 
     private
+
+    def self.class_name
+      name.split('::').last.downcase
+    end
+
+    def self.sort_method(sort)
+      sort == 1 ? '' : 'popular'
+    end
 
     def self.exists?
       @client.code == '200'
