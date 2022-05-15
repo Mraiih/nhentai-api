@@ -119,7 +119,8 @@ end
       @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/"))
       return unless exists?
 
-      @client.body.match(%r{<a.*class="count">(.*)<\/span><\/a>})[1].to_i
+      count = @client.body.match(%r{<a.*class="count">(.*)<\/span><\/a>})[1]
+      count[-1] == 'K' ? count.to_i * 1000 : count.to_i
     end
 
     def self.listing(keyword, sort = 1, page = 1)
