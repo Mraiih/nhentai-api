@@ -1,9 +1,12 @@
-# Upcoming
+# Upcoming (1.0?)
 ### Add
 - [[12a145a](https://github.com/Mraiih/nhentai-api/commit/12a145a15ae1b5d116470c9de189a38da4890b49)] Search class with `#count` and `#listing` method
 ### Fixes
 - [[afa0122](https://github.com/Mraiih/nhentai-api/commit/afa0122ec958507de7ac812623dfcbfd18bec2e1)] `.count` method should work with numbers >= 1000
 ### Others
+- **BREAKING CHANGES** `.count` and `.listing` class method for Tag Parody Character Artist Group Language and Category classes will now be instance variable
+- **BREAKING CHANGES** `.new` method for Tag Parody Character Artist Group Language and Category classes will now require named parameters instead of positional  parameters
+- **BREAKING CHANGES** `.new`, `#page`, `#thumbnail` methods for Doujinshi class will now require named parameter instead of positional parameter
 
 # 0.3
 ### Add
