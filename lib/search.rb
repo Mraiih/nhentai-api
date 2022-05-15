@@ -3,7 +3,7 @@
 class Search
   attr_reader :options, :client
 
-  def initialize(options, sort = 1, page = 1)
+  def initialize(options:, sort: 1, page: 1)
     @options = options
     @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{sort_method(sort)}&page=#{page}"))
   end

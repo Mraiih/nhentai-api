@@ -3,7 +3,7 @@
 require 'nhentai-api'
 
 RSpec.describe Doujinshi do
-  subject(:doujin) { described_class.new(id) }
+  subject(:doujin) { described_class.new(id: id) }
   let!(:id) { 220_794 }
 
   describe '#initialize' do
@@ -57,7 +57,7 @@ RSpec.describe Doujinshi do
 
     context 'when we give a specific page' do
       it 'returns the correct page' do
-        expect(doujin.page(5)).to include('/galleries/1170172/5.png')
+        expect(doujin.page(page: 5)).to include('/galleries/1170172/5.png')
       end
     end
   end
@@ -79,7 +79,7 @@ RSpec.describe Doujinshi do
 
     context 'when we give a specific thumbnail' do
       it 'returns the correct thumbnail' do
-        expect(doujin.thumbnail(5)).to include('/galleries/1170172/5t.png')
+        expect(doujin.thumbnail(page: 5)).to include('/galleries/1170172/5t.png')
       end
     end
   end

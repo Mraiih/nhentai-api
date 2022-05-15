@@ -3,7 +3,7 @@
 class Doujinshi
   attr_reader :id, :client, :media_id, :count_pages, :response
 
-  def initialize(id)
+  def initialize(id:)
     @id           = id
     @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
     return unless exists?
@@ -26,24 +26,24 @@ class Doujinshi
     "https://t.nhentai.net/galleries/#{media_id}/cover.#{res[1]}"
   end
 
-  def page(page = 1)
+  def page(page: 1)
     res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/#{page}t\.(.{3})"})
 
     "https://i.nhentai.net/galleries/#{media_id}/#{page}.#{res[1]}"
   end
 
   def pages
-    (1..count_pages).map { |page| page(page) }
+    (1..count_pages).map { |page| page(page: page) }
   end
 
-  def thumbnail(page = 1)
+  def thumbnail(page: 1)
     res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/(#{page}t\..{3})"})
 
     "https://t.nhentai.net/galleries/#{media_id}/#{res[1]}"
   end
 
   def thumbnails
-    (1..count_pages).map { |page| thumbnail(page) }
+    (1..count_pages).map { |page| thumbnail(page: page) }
   end
 
   def count_favorites

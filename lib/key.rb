@@ -2,38 +2,40 @@
 
 %w[tag parody character artist group language category].each do |class_name|
   c = Class.new do
-    def self.count(keyword)
-      keyword     = keyword.tr(' ', '-')
-      @client     = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword}/"))
-      return unless exists?
+    attr_reader :client
 
-      count = @client.body.match(%r{<a.*class="count">(.*)<\/span><\/a>})[1]
+    def initialize(keyword:, sort: 1, page: 1)
+      @client = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword.tr(' ', '-')}/#{sort_method(sort)}?page=#{page}"))
+    end
+
+    def count
+      res = client.body.match(%r{<a.*class="count">(.*)<\/span><\/a>})
+      return 0 if res.nil?
+
+      count = res[1]
       count[-1] == 'K' ? count.to_i * 1000 : count.to_i
     end
 
-    def self.listing(keyword, sort = 1, page = 1)
-      @client = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword.tr(' ', '-')}/#{sort_method(sort)}?page=#{page}"))
-      return unless exists?
-
-      res = @client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
+    def listing
+      res = client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
       parse_tags(res)
+    end
+
+    def exists?
+      @client.code == '200'
     end
 
     private
 
-    def self.class_name
-      name.split('::').last.downcase
+    def class_name
+      self.class.name.split('::').last.downcase
     end
 
-    def self.sort_method(sort)
+    def sort_method(sort)
       sort == 1 ? '' : 'popular'
     end
 
-    def self.exists?
-      @client.code == '200'
-    end
-
-    def self.parse_tags(res)
+    def parse_tags(res)
       res.map do |line|
         id    = line.match(%r{/g/(\d+)/})[1]
         name  = line.match(/<div class="caption">(.+)/)[1].strip

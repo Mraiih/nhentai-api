@@ -3,38 +3,35 @@
 require 'nhentai-api'
 
 RSpec.describe Tag do
+  subject { described_class.new(keyword: keyword, sort: sort, page: page) }
   let(:keyword) { 'sole female' }
   let(:sort) { 1 }
   let(:page) { 1 }
 
-  describe '.count' do
-    subject { described_class.count(keyword) }
-
+  describe '#count' do
     it "returns a number" do
-      expect(subject).to be_a(Integer)
+      expect(subject.count).to be_a(Integer)
     end
 
     context 'when the group does not exist' do
       let(:keyword) { 'nopies' }
 
-      it 'returns nil' do
-        expect(subject).to be_nil
+      it 'returns 0' do
+        expect(subject.count).to eq(0)
       end
     end
   end
 
-  describe '.listing' do
-    subject { described_class.listing(keyword, sort, page) }
-
+  describe '#listing' do
     it 'returns an OpenStruct' do
-      expect(subject.first.class).to eq(OpenStruct)
+      expect(subject.listing.first.class).to eq(OpenStruct)
     end
 
     context 'when the tag does not exist' do
       let(:keyword) { 'nopies' }
 
-      it 'returns nil' do
-        expect(subject).to be_nil
+      it 'returns an empty array' do
+        expect(subject.listing).to eq([])
       end
     end
 
@@ -42,7 +39,7 @@ RSpec.describe Tag do
       let(:sort) { 0 }
 
       it 'returns the most popular doujin' do
-        expect(subject.first.name).to eq('[Puu no Puupuupuu (Puuzaki Puuna)] Hitozukiai ga Nigate na Miboujin no Yukionna-san to Noroi no Yubiwa [English]')
+        expect(subject.listing.first.name).to eq('[Puu no Puupuupuu (Puuzaki Puuna)] Hitozukiai ga Nigate na Miboujin no Yukionna-san to Noroi no Yubiwa [English]')
       end
     end
   end
