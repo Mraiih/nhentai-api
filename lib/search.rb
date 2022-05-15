@@ -5,8 +5,7 @@ class Search
 
   def initialize(options:, sort: :none, page: 1)
     @options = options
-    pp string_options
-    # @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
+    @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
   end
 
   def exists?
