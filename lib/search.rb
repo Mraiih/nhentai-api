@@ -5,7 +5,8 @@ class Search
 
   def initialize(options:, sort: :none, page: 1)
     @options = options
-    @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
+    pp string_options
+    # @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
   end
 
   def exists?
@@ -43,6 +44,8 @@ class Search
     ary = []
 
     %i[included excluded].each do |type|
+      next if tags[type].nil?
+
       %i[tags parodies characters artists groups languages categories].each do |subtype|
         next if tags[type][subtype].empty? || tags[type][subtype].nil?
 
