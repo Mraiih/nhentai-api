@@ -20,7 +20,7 @@ class Search
 
   def listing
     res = client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
-    parse_search(res)
+    parse_tiles(res)
   end
 
   private
@@ -29,16 +29,6 @@ class Search
     %i[keywords tags pages dates]
       .map { |symbol| send("parse_#{symbol}", options[symbol]) if options[symbol] }
       .join(' ')
-  end
-
-  def parse_search(res)
-    res.map do |line|
-      id    = line.match(%r{/g/(\d+)/})[1]
-      name  = line.match(/<div class="caption">(.+)/)[1].strip
-      url   = "/g/#{id}"
-
-      OpenStruct.new(id: id, name: name, url: url)
-    end
   end
 
   def parse_pages(pages)

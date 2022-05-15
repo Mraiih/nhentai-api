@@ -18,7 +18,7 @@
 
     def listing
       res = client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
-      parse_tags(res)
+      parse_tiles(res)
     end
 
     def exists?
@@ -29,16 +29,6 @@
 
     def class_name
       self.class.name.split('::').last.downcase
-    end
-
-    def parse_tags(res)
-      res.map do |line|
-        id    = line.match(%r{/g/(\d+)/})[1]
-        name  = line.match(/<div class="caption">(.+)/)[1].strip
-        url   = "/g/#{id}"
-
-        OpenStruct.new(id: id, name: name, url: url)
-      end
     end
   end
 
