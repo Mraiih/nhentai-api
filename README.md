@@ -26,25 +26,11 @@ puts doujinshi.title
 puts doujinshi.pages
 
 puts Tag.listing('ahegao')
-puts Character.listing('2b', 0, 1)
+puts Character.listing('2b', sort: :all_time, page: 5)
 ```
 
 ## Documentation
 The [wiki](https://github.com/Mraiih/nhentai-api/wiki/Documentation) contains the list of all methods with examples
-
-## TODO
-**v1.0**
-- [x] basic search
-- [x] multiples words search
-- [x] exclude words search
-- [x] tags in search
-- [x] tag page
-- [x] parody page
-- [x] character page
-- [x] artist page
-- [x] group page
-- [x] language page
-- [x] category page
 
 ## Contributors
 
