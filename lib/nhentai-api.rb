@@ -9,6 +9,22 @@ SORT = {
   all_time: 'popular'
 }.freeze
 
+IMAGE_EXTENSION = {
+  'j' => 'jpg',
+  'p' => 'png',
+  'g' => 'gif'
+}.freeze
+
+SINGULAR_TAG = {
+  'tags' => 'tag',
+  'parodies' => 'parody',
+  'characters' => 'character',
+  'artists' => 'artist',
+  'groups' => 'group',
+  'languages' => 'language',
+  'categories' => 'category'
+}.freeze
+
 def parse_tiles(res)
   res.map do |line|
     id    = line.match(%r{/g/(\d+)/})[1]

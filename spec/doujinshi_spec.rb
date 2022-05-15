@@ -6,16 +6,6 @@ RSpec.describe Doujinshi do
   subject(:doujin) { described_class.new(id: id) }
   let!(:id) { 220_794 }
 
-  describe '#initialize' do
-    it { is_expected.to have_attributes(id: 220_794, media_id: '1170172', count_pages: 31) }
-
-    context 'when the doujinshi does not exist' do
-      let(:id) { -1 }
-
-      it { is_expected.to have_attributes(media_id: nil, count_pages: nil) }
-    end
-  end
-
   describe '#exists?' do
     it 'returns true' do
       expect(doujin.exists?).to be(true)
@@ -30,9 +20,27 @@ RSpec.describe Doujinshi do
     end
   end
 
+  describe '#media_id' do
+    it 'returns the media_id' do
+      expect(doujin.media_id).to eq("1170172")
+    end
+  end
+
+  describe '#num_pages' do
+    it 'returns the number of pages' do
+      expect(doujin.num_pages).to eq(31)
+    end
+  end
+
   describe '#title' do
     it 'returns the title' do
       expect(doujin.title).to eq('Android no Ecchi na Yatsu | Horny Androids')
+    end
+
+    context 'when we ask for another type of title' do
+      it 'returns the title' do
+        expect(doujin.title(type: :english)).to eq('[Illumination. (Ogadenmon)] Android no Ecchi na Yatsu | Horny Androids (NieR:Automata) [English] =TLL + mrwayne= [Digital]')
+      end
     end
   end
 
@@ -102,19 +110,19 @@ RSpec.describe Doujinshi do
 
   describe '#upload_date' do
     it 'returns the date of upload' do
-      expect(doujin.upload_date).to eq(Time.parse('2018-01-17 15:56:16.761986000 +0000'))
+      expect(doujin.upload_date).to eq(Time.parse('2018-01-17 15:56:16 UTC'))
     end
   end
 
   describe '#tags' do
     it 'returns the list of tags' do
-      tag = OpenStruct.new(id: '35762', name: 'sole female', count: 0, url: '/tag/sole-female/')
+      tag = OpenStruct.new(id: 35_762, name: 'sole female', count: 0, url: '/tag/sole-female/')
 
       expect(doujin.tags.each { |tag| tag.count = 0 }).to include(tag)
     end
 
     context 'when the doujin does not have any tag' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.tags).to eq([])
@@ -134,7 +142,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any tag' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.tags?).to be(false)
@@ -144,13 +152,13 @@ RSpec.describe Doujinshi do
 
   describe '#parodies' do
     it 'returns the list of parodies' do
-      parody = OpenStruct.new(id: '73370', name: 'nier automata', count: 0, url: '/parody/nier-automata/')
+      parody = OpenStruct.new(id: 73_370, name: 'nier automata', count: 0, url: '/parody/nier-automata/')
 
       expect(doujin.parodies.each { |tag| tag.count = 0 }).to include(parody)
     end
 
     context 'when the doujin does not have any parody' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.parodies).to eq([])
@@ -170,7 +178,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any parody' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.parodies?).to be(false)
@@ -180,13 +188,13 @@ RSpec.describe Doujinshi do
 
   describe '#characters' do
     it 'returns the list of characters' do
-      character = OpenStruct.new(id: '71544', name: '2b', count: 0, url: '/character/2b/')
+      character = OpenStruct.new(id: 71_544, name: '2b', count: 0, url: '/character/2b/')
 
       expect(doujin.characters.each { |tag| tag.count = 0 }).to include(character)
     end
 
     context 'when the doujin does not have any character' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.characters).to eq([])
@@ -206,7 +214,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any character' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.characters?).to be(false)
@@ -216,13 +224,13 @@ RSpec.describe Doujinshi do
 
   describe '#artists' do
     it 'returns the list of artists' do
-      artist = OpenStruct.new(id: '10644', name: 'ogadenmon', count: 0, url: '/artist/ogadenmon/')
+      artist = OpenStruct.new(id: 10_644, name: 'ogadenmon', count: 0, url: '/artist/ogadenmon/')
 
       expect(doujin.artists.each { |tag| tag.count = 0 }).to include(artist)
     end
 
     context 'when the doujin does not have any artist' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.artists).to eq([])
@@ -242,7 +250,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any artist' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.artists?).to be(false)
@@ -252,13 +260,13 @@ RSpec.describe Doujinshi do
 
   describe '#groups' do
     it 'returns the list of groups' do
-      group = OpenStruct.new(id: '35330', name: 'illumination.', count: 0, url: '/group/illumination/')
+      group = OpenStruct.new(id: 35_330, name: 'illumination.', count: 0, url: '/group/illumination/')
 
       expect(doujin.groups.each { |tag| tag.count = 0 }).to include(group)
     end
 
     context 'when the doujin does not have any group' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.groups).to eq([])
@@ -278,7 +286,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any group' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.groups?).to be(false)
@@ -288,13 +296,13 @@ RSpec.describe Doujinshi do
 
   describe '#languages' do
     it 'returns the list of languages' do
-      language = OpenStruct.new(id: '12227', name: 'english', count: 0, url: '/language/english/')
+      language = OpenStruct.new(id: 12_227, name: 'english', count: 0, url: '/language/english/')
 
       expect(doujin.languages.each { |tag| tag.count = 0 }).to include(language)
     end
 
     context 'when the doujin does not have any language' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.languages).to eq([])
@@ -314,7 +322,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any language' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.languages?).to be(false)
@@ -324,13 +332,13 @@ RSpec.describe Doujinshi do
 
   describe '#categories' do
     it 'returns the list of categories' do
-      category = OpenStruct.new(id: '33172', name: 'doujinshi', count: 0, url: '/category/doujinshi/')
+      category = OpenStruct.new(id: 33_172, name: 'doujinshi', count: 0, url: '/category/doujinshi/')
 
       expect(doujin.categories.each { |tag| tag.count = 0 }).to include(category)
     end
 
     context 'when the doujin does not have any category' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns an empty list' do
         expect(doujin.categories).to eq([])
@@ -350,7 +358,7 @@ RSpec.describe Doujinshi do
     end
 
     context 'when the doujin does not have any category' do
-      before { allow_any_instance_of(MatchData).to receive(:nil?).and_return(true) }
+      before { allow(doujin).to receive(:response).and_return({ 'tags' => [] }) }
 
       it 'returns false' do
         expect(doujin.categories?).to be(false)

@@ -1,69 +1,65 @@
 # frozen_string_literal: true
 
 class Doujinshi
-  attr_reader :id, :client, :media_id, :count_pages, :response
+  attr_reader :client, :response
 
   def initialize(id:)
-    @id           = id
-    @client       = Net::HTTP.get_response(URI("https://nhentai.net/g/#{@id}/"))
+    @client = Net::HTTP.get_response(URI("https://nhentai.net/api/gallery/#{id}"))
     return unless exists?
 
-    @media_id     = client.body.match(%r{\/([0-9]+)\/cover})[1]
-    @count_pages  = client.body.match(/Pages:\s*.*>([0-9]+)</)[1].to_i
+    @response = JSON.parse(client.body)
   end
 
   def exists?
     client.code == '200'
   end
 
-  def title
-    client.body.match(/"pretty">(.*?)</)[1]
+  def media_id
+    response['media_id']
+  end
+
+  def num_pages
+    response['num_pages']
+  end
+
+  def title(type: :pretty)
+    response['title'][type.to_s]
   end
 
   def cover
-    res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/cover\.(.{3})"})
-
-    "https://t.nhentai.net/galleries/#{media_id}/cover.#{res[1]}"
+    "https://t.nhentai.net/galleries/#{media_id}/cover.#{IMAGE_EXTENSION[response['images']['cover']['t']]}"
   end
 
   def page(page: 1)
-    res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/#{page}t\.(.{3})"})
-
-    "https://i.nhentai.net/galleries/#{media_id}/#{page}.#{res[1]}"
+    "https://i.nhentai.net/galleries/#{media_id}/#{page}.#{IMAGE_EXTENSION[response['images']['pages'][page - 1]['t']]}"
   end
 
   def pages
-    (1..count_pages).map { |page| page(page: page) }
+    (1..num_pages).map { |page| page(page: page) }
   end
 
   def thumbnail(page: 1)
-    res = client.body.match(%r{https://t.*.nhentai.net/galleries/#{media_id}/(#{page}t\..{3})"})
-
-    "https://t.nhentai.net/galleries/#{media_id}/#{res[1]}"
+    "https://t.nhentai.net/galleries/#{media_id}/#{page}t.#{IMAGE_EXTENSION[response['images']['pages'][page - 1]['t']]}"
   end
 
   def thumbnails
-    (1..count_pages).map { |page| thumbnail(page: page) }
+    (1..num_pages).map { |page| thumbnail(page: page) }
   end
 
   def count_favorites
-    regex = %r{<span>Favorite <span class="nobold">.(\d+).<\/span><\/span>}
-
-    client.body.match(regex)[1].to_i
+    response['num_favorites']
   end
 
   def upload_date
-    Time.iso8601(client.body.match(/<time .+ datetime="(.*?)"/)[1])
+    Time.at(response['upload_date']).utc
   end
 
   %w[tags parodies characters artists groups languages categories].each do |method|
     define_method method do
       return instance_variable_get("@#{method}") if instance_variable_defined?("@#{method}")
 
-      res = client.body.match(%r{#{method.capitalize}:\s*<span class="tags">(.+)<\/span>})
-      return [] if res.nil?
-
-      instance_variable_set("@#{method}", parsing_informations(res[1]))
+      res = response['tags'].select { |tag| tag['type'] == SINGULAR_TAG[method] }
+      instance_variable_set("@#{method}", parsing_informations(res))
     end
 
     define_method "count_#{method}" do
@@ -78,31 +74,13 @@ class Doujinshi
   private
 
   def parsing_informations(res)
-    res.split(%r{<a(.+?)<\/a>}).reject(&:empty?).map do |line|
-      id    = parse_id(line)
-      name  = parse_name(line)
-      count = parse_count(line)
-      url   = parse_url(line)
-
-      OpenStruct.new(id: id, name: name, count: count, url: url)
+    res.map do |line|
+      OpenStruct.new(
+        id: line['id'],
+        name: line['name'],
+        count: line['count'],
+        url: line['url']
+      )
     end
-  end
-
-  def parse_id(line)
-    line.match(/tag-(\d+)/)[1]
-  end
-
-  def parse_name(line)
-    line.match(/class="name">(.+?)</)[1].strip
-  end
-
-  def parse_count(line)
-    count = line.match(/class="count">(\d+.)</)[1]
-
-    count[-1] == 'K' ? count.to_i * 1000 : count.to_i
-  end
-
-  def parse_url(line)
-    line.match(/href=\"(.+?)\"/)[1]
   end
 end
