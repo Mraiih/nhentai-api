@@ -5,7 +5,7 @@ require 'nhentai-api'
 RSpec.describe Tag do
   subject { described_class.new(keyword: keyword, sort: sort, page: page) }
   let(:keyword) { 'sole female' }
-  let(:sort) { 1 }
+  let(:sort) { :none }
   let(:page) { 1 }
 
   describe '#count' do
@@ -36,7 +36,7 @@ RSpec.describe Tag do
     end
 
     context 'when the search is sorted by popularity' do
-      let(:sort) { 0 }
+      let(:sort) { :all_time }
 
       it 'returns the most popular doujin' do
         expect(subject.listing.first.name).to eq('[Puu no Puupuupuu (Puuzaki Puuna)] Hitozukiai ga Nigate na Miboujin no Yukionna-san to Noroi no Yubiwa [English]')

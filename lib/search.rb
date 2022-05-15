@@ -3,9 +3,9 @@
 class Search
   attr_reader :options, :client
 
-  def initialize(options:, sort: 1, page: 1)
+  def initialize(options:, sort: :none, page: 1)
     @options = options
-    @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{sort_method(sort)}&page=#{page}"))
+    @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
   end
 
   def exists?
@@ -24,10 +24,6 @@ class Search
   end
 
   private
-
-  def sort_method(sort)
-    sort == 1 ? '' : 'popular'
-  end
 
   def string_options
     %i[keywords tags pages dates]

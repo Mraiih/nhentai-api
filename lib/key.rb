@@ -4,8 +4,8 @@
   c = Class.new do
     attr_reader :client
 
-    def initialize(keyword:, sort: 1, page: 1)
-      @client = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword.tr(' ', '-')}/#{sort_method(sort)}?page=#{page}"))
+    def initialize(keyword:, sort: :none, page: 1)
+      @client = Net::HTTP.get_response(URI("https://nhentai.net/#{class_name}/#{keyword.tr(' ', '-')}/#{SORT[sort]}?page=#{page}"))
     end
 
     def count
@@ -29,10 +29,6 @@
 
     def class_name
       self.class.name.split('::').last.downcase
-    end
-
-    def sort_method(sort)
-      sort == 1 ? '' : 'popular'
     end
 
     def parse_tags(res)
