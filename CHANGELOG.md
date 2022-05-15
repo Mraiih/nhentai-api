@@ -1,4 +1,4 @@
-# Upcoming (1.0?)
+# Upcoming (1.0)
 ### Add
 - [[12a145a](https://github.com/Mraiih/nhentai-api/commit/12a145a15ae1b5d116470c9de189a38da4890b49)] Search class with `#count` and `#listing` method
 ### Fixes
@@ -7,7 +7,7 @@
 - [[13629c3](https://github.com/Mraiih/nhentai-api/commit/13629c3333a1d98f698ae60a57e3b83b2b18f418)] **BREAKING CHANGES** `.count` and `.listing` class method for Tag Parody Character Artist Group Language and Category classes will now be instance variable
 - [[13629c3](https://github.com/Mraiih/nhentai-api/commit/13629c3333a1d98f698ae60a57e3b83b2b18f418)] **BREAKING CHANGES** `.new` method for Tag Parody Character Artist Group Language and Category classes will now require named parameters instead of positional  parameters
 - [[13629c3](https://github.com/Mraiih/nhentai-api/commit/13629c3333a1d98f698ae60a57e3b83b2b18f418)] **BREAKING CHANGES** `.new`, `#page`, `#thumbnail` methods for Doujinshi class will now require named parameter instead of positional parameter
-- [[03cdb73](https://github.com/Mraiih/nhentai-api/commit/03cdb7358e83dd2191190b194cfa38e15c2c1a7a)]**BREAKING CHANGES** `sort` argument will now receive a symbol instead of an integer, options will be `:none`, `:today`, `:week`, `:all_time`
+- [[03cdb73](https://github.com/Mraiih/nhentai-api/commit/03cdb7358e83dd2191190b194cfa38e15c2c1a7a)] **BREAKING CHANGES** `sort` argument will now receive a symbol instead of an integer, options will be `:none`, `:today`, `:week`, `:all_time`
 - Cleanup some code
 
 # 0.3
