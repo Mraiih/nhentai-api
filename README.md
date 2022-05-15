@@ -34,10 +34,10 @@ The [wiki](https://github.com/Mraiih/nhentai-api/wiki/Documentation) contains th
 
 ## TODO
 **v1.0**
-- [ ] basic search
-- [ ] multiples words search
-- [ ] exclude words search
-- [ ] tags in search
+- [x] basic search
+- [x] multiples words search
+- [x] exclude words search
+- [x] tags in search
 - [x] tag page
 - [x] parody page
 - [x] character page
