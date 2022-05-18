@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Search
-  attr_reader :options, :client
-
   def initialize(options:, sort: :none, page: 1)
     @options = options
-    @client = Net::HTTP.get_response(URI("https://nhentai.net/search/?q=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
+    @client = Net::HTTP.get_response(URI("https://nhentai.net/api/galleries/search?query=#{string_options}&sort=#{SORT[sort]}&page=#{page}"))
+    return unless exists?
+
+    @response = JSON.parse(client.body)
   end
 
   def exists?
@@ -13,17 +14,24 @@ class Search
   end
 
   def count
-    client.body.match(%r{<h1>.*<\/i>(.*) results<\/h1>})[1]
-      .tr(',', '')
-      .to_i
+    response['result'].count
+  end
+
+  def num_pages
+    response['num_pages']
+  end
+
+  def per_page
+    response['per_page']
   end
 
   def listing
-    res = client.body.split(%r{<div class="gallery".+?>(.*?)<\/div>}).select { |line| line.include?('<a href="/g/') }
-    parse_tiles(res)
+    response['result'].map { |doujin| Doujinshi.new(id: doujin) }
   end
 
   private
+
+  attr_reader :options, :client, :response
 
   def string_options
     %i[keywords tags pages dates]

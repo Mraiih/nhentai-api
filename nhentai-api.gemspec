@@ -12,6 +12,9 @@ Gem::Specification.new do |s|
   s.homepage              = 'https://rubygems.org/gems/nhentai-api'
   s.license               = 'MIT'
   s.metadata              = {
-    'source_code_uri' => 'https://github.com/Mraiih/nhentai-api'
+    'source_code_uri'   => 'https://github.com/Mraiih/nhentai-api',
+    'changelog_uri'     => 'https://github.com/Mraiih/nhentai-api/blob/master/CHANGELOG.md',
+    'documentation_uri' => 'https://github.com/Mraiih/nhentai-api/wiki/Documentation',
+    'funding_uri'       => 'https://ko-fi.com/mraiih'
   }
 end

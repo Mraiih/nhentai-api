@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 class Doujinshi
-  attr_reader :client, :response
-
   def initialize(id:)
-    @client = Net::HTTP.get_response(URI("https://nhentai.net/api/gallery/#{id}"))
-    return unless exists?
+    case id
+    when Integer, String
+      @client = Net::HTTP.get_response(URI("https://nhentai.net/api/gallery/#{id}"))
+      return unless exists?
 
-    @response = JSON.parse(client.body)
+      @response = JSON.parse(client.body)
+    when Hash
+      @response = id
+    end
   end
 
   def exists?
@@ -72,6 +75,8 @@ class Doujinshi
   end
 
   private
+
+  attr_reader :client, :response
 
   def parsing_informations(res)
     res.map do |line|
