@@ -6,6 +6,12 @@ RSpec.describe Doujinshi do
   subject(:doujin) { described_class.new(id: id) }
   let!(:id) { 220_794 }
 
+  describe '.random' do
+    it 'returns an Doujin' do
+      expect(described_class.random).to be_a(Doujinshi)
+    end
+  end
+
   describe '#exists?' do
     it 'returns true' do
       expect(doujin.exists?).to be(true)

@@ -4,6 +4,7 @@ class Doujinshi
   def initialize(id:)
     case id
     when Integer, String
+      @id     = id
       @client = Net::HTTP.get_response(URI("https://nhentai.net/api/gallery/#{id}"))
       return unless exists?
 
@@ -11,6 +12,10 @@ class Doujinshi
     when Hash
       @response = id
     end
+  end
+
+  def self.random
+    fetch('https://nhentai.net/random')
   end
 
   def exists?
@@ -74,9 +79,16 @@ class Doujinshi
     end
   end
 
+  def related
+    client    = Net::HTTP.get_response(URI("https://nhentai.net/api/gallery/#{id}/related"))
+    response  = JSON.parse(client.body)
+
+    response['result'].map { |doujin| Doujinshi.new(id: doujin) }
+  end
+
   private
 
-  attr_reader :client, :response
+  attr_reader :client, :response, :id
 
   def parsing_informations(res)
     res.map do |line|
@@ -86,6 +98,15 @@ class Doujinshi
         count: line['count'],
         url: line['url']
       )
+    end
+  end
+
+  def self.fetch(uri_str)
+    client = Net::HTTP.get_response(URI(uri_str))
+
+    case client
+    when Net::HTTPFound then new(id: client['location'][3..-2])
+    when Net::HTTPRedirection then fetch("https://nhentai.net#{client['location']}")
     end
   end
 end
