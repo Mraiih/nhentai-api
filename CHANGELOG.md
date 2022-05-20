@@ -1,6 +1,7 @@
 # Upcoming (1.0)
 ### Add
 - [[12a145a](https://github.com/Mraiih/nhentai-api/commit/12a145a15ae1b5d116470c9de189a38da4890b49)] Search class with `#count` and `#listing` method
+- Doujinshi now have `.random` class method and `#related` method
 ### Fixes
 - [[afa0122](https://github.com/Mraiih/nhentai-api/commit/afa0122ec958507de7ac812623dfcbfd18bec2e1)] `.count` method should work with numbers >= 1000
 ### Others
