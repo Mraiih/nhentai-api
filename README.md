@@ -16,12 +16,12 @@ gem install nhentai-api
 
 Gemfile
 ```
-gem 'nhentai-api'
+gem 'nhentai-api', '~> 1.0'
 ```
 
 ## API
 ```
-doujinshi = Doujinshi.new(220794)
+doujinshi = Doujinshi.new(id: 220794)
 puts doujinshi.title
 puts doujinshi.pages
 
