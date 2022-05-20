@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name                  = 'nhentai-api'
-  s.version               = '0.3'
-  s.date                  = '2022-05-14'
+  s.version               = '1.0'
+  s.date                  = '2022-05-20'
   s.summary               = 'nhentai-api is a basic and easy to use API for nhentai.net'
   s.description           = 'nhentai-api is a basic and easy to use API for nhentai.net'
   s.authors               = ['Gael Roussel']
