@@ -13,18 +13,27 @@ gem install nhentai-api
 ```
 
 Gemfile
-```
+```ruby
 gem 'nhentai-api', '~> 1.0'
 ```
 
 ## API
-```
+```ruby
 doujinshi = Doujinshi.new(id: 220794)
 puts doujinshi.title
 puts doujinshi.pages
+puts doujinshi.related
+
+puts Doujinshi.random
 
 puts Tag.new(keyword: 'ahegao').listing
 puts Character.new(keyword: '2b', sort: :all_time, page: 5).listing
+
+options = {
+  keywords: { included: ["girl"] },
+  pages: [">= 10", "<= 200"]
+}
+puts Search.new(options: options).listing
 ```
 
 ## Documentation
