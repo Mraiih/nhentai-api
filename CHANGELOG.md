@@ -1,3 +1,7 @@
+# 1.0.1 - May 21, 2022
+### Fixes
+- Files required
+
 # 1.0 - May 20, 2022
 ### Add
 - [[12a145a](https://github.com/Mraiih/nhentai-api/commit/12a145a15ae1b5d116470c9de189a38da4890b49)] Search class with `#count` and `#listing` method
