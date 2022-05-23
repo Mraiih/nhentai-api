@@ -1,6 +1,6 @@
 # 1.0.1 - May 21, 2022
 ### Fixes
-- Files required
+- [[0435539](https://github.com/Mraiih/nhentai-api/commit/0435539d6116e823352c0f7a33b125f9ccb8c833)] Files required
 
 # 1.0 - May 20, 2022
 ### Add
