@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 %w[net/http ostruct time json].each { |e| require e }
-%w[doujinshi search key].each { |e| require_relative e }
+%w[doujinshi search key].each { |e| require "nhentai-api/#{e}" }
 
 SORT = {
   today: 'popular-today',
