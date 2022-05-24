@@ -1,3 +1,7 @@
+<div align="center">
+  <img width="50%" src="https://user-images.githubusercontent.com/34044731/170015085-3aac939a-0bc9-46cf-aad5-75f21a04498e.png">
+</div>
+
 [![Gem Version](https://badge.fury.io/rb/nhentai-api.png)](https://badge.fury.io/rb/nhentai-api)
 ![](https://ruby-gem-downloads-badge.herokuapp.com/nhentai-api?type=total&color=red&style=flat)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
