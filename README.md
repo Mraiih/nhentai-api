@@ -1,11 +1,12 @@
-<div align="center">
-  <img width="50%" src="https://user-images.githubusercontent.com/34044731/170015085-3aac939a-0bc9-46cf-aad5-75f21a04498e.png">
-</div>
-
 [![Gem Version](https://badge.fury.io/rb/nhentai-api.png)](https://badge.fury.io/rb/nhentai-api)
 ![](https://ruby-gem-downloads-badge.herokuapp.com/nhentai-api?type=total&color=red&style=flat)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
-[![Maintainability](https://api.codeclimate.com/v1/badges/02e6104284d2f96e502c/maintainability)](https://codeclimate.com/github/Mraiih/nhentai-api/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/02e6104284d2f96e502c/maintainability)](https://codeclimate.com/github/Mraiih/nhentai-api/maintainability)  
+<br>
+
+<div align="center">
+  <img width="50%" src="https://user-images.githubusercontent.com/34044731/170018433-f9f7ee6d-b505-448f-981a-964bb3ba227b.png">
+</div>
 
 # nhentai-api
 nhentai-api is a basic and easy to use API for [nhentai.net](https://nhentai.net)
